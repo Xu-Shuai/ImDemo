@@ -38,8 +38,9 @@ public class Service {
     }
     private void start() {
         Socket socket = null;
+        while (true) {
         try {
-            while (true) {
+
                 socket = server.accept();
                 sockets.add(socket);
                 mReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
@@ -48,11 +49,12 @@ public class Service {
                 new ServiceSendThread(sockets, socket, mWriter, msgQuery).start();
                 System.out.println("客户端:" + socket.getInetAddress() + "与服务器连接成功");
                 Thread.sleep(100);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("现在有" +(sockets.size()) + "个在线用户");
+        }
+
     }
     public static void main(String[] args) {
         new Service(9000);
